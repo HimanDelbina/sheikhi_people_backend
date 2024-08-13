@@ -4,6 +4,7 @@ from core import views
 urlpatterns = [
     path("create_people", views.create_people),
     path("edit_sms_people", views.edit_sms_people),
+    path("edit_sms_all_people", views.edit_sms_all_people),
     path("edit_recive_people", views.edit_recive_people),
     path("get_all_people", views.get_all_people),
     path("get_sms_people", views.get_sms_people),

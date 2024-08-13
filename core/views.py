@@ -13,6 +13,11 @@ from rest_framework.decorators import permission_classes, api_view
 from rest_framework.response import Response
 from core.serializers import *
 from core.models import *
+import requests
+import json
+import http
+from sms_ir import SmsIr
+import ast
 
 
 @api_view(["POST"])
@@ -46,7 +51,38 @@ def edit_sms_people(request):
     etid_data = request.data
     edit_data_find_in_database = PeopleModel.objects.get(id=etid_data["id"])
     edit_data_find_in_database.is_sms = etid_data["is_sms"]
+    phone = etid_data["phone_number"]
+    message = etid_data["message"]
+    sms_ir = SmsIr(
+        "eakkbYygGNyC4BvGM5F1uIvvhQNeHpOyYfK7hNciF2dYn2C0eY4wWOtrddC6grL7",
+        "300089931197",
+    )
+    sms_ir.send_sms(phone, message, "300089931197")
+    sms_ir.report_latest_received(5)
     edit_data_find_in_database.save()
+    return Response("form is update succesfully....", status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def edit_sms_all_people(request):
+    etid_data = request.data
+    phone = etid_data["phone_number"]
+    id = etid_data["id"]
+    # list_phone = ast.literal_eval(phone)
+    # list_id = ast.literal_eval(id)
+    print(phone)
+    print(id)
+    message = etid_data["message"]
+    sms_ir = SmsIr(
+        "eakkbYygGNyC4BvGM5F1uIvvhQNeHpOyYfK7hNciF2dYn2C0eY4wWOtrddC6grL7",
+        "300089931197",
+    )
+    sms_ir.send_bulk_sms(phone, message, "300089931197")
+    for x in id:
+        edit_data_find_in_database = PeopleModel.objects.get(id=x)
+        edit_data_find_in_database.is_sms = True
+        edit_data_find_in_database.save()
     return Response("form is update succesfully....", status=status.HTTP_200_OK)
 
 
