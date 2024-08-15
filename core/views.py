@@ -1,5 +1,4 @@
 from ast import Store
-from asyncio.windows_events import NULL
 from urllib import response
 from rest_framework import status
 from django.contrib.auth.models import User
