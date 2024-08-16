@@ -5,7 +5,7 @@ from django.db import models
 
 class PeopleModel(models.Model):
     phone_number = models.CharField(
-        max_length=11, unique=True, help_text="شماره موبایل"
+        max_length=13, unique=True, help_text="شماره موبایل"
     )
     count = models.IntegerField(help_text="تعداد")
     is_sms = models.BooleanField(help_text="ایا اس ام اس ارسال شده", default=False)

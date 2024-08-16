@@ -190,3 +190,32 @@ def edit_user(request):
     edit_data_find_in_database.is_active = etid_data["is_active"]
     edit_data_find_in_database.save()
     return Response("form is update succesfully....", status=status.HTTP_200_OK)
+
+import requests
+
+# Check the end of the url -->                                                                             HERE --v
+
+import pandas as pd
+@api_view(["GET"])
+def add_sms(request):
+    url = 'https://mega.nz/file/tGRH3JqB#N-2l65FrnokXFfqHbTQnDqfqREkn6izu8OKNlZCULd8'
+    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/114.0'}
+
+    resp = requests.get(url, headers=headers)
+    data = pd.read_excel(resp)
+    print(data)
+    # data = pd.read_excel("f:/test.xlsx")
+    print(len(data))
+    for i in range(0, len(data)):
+        s = PeopleModel()
+        s.phone_number = str(data.iloc[i][0])
+        s.count = data.iloc[i][1]
+        print("*********************")
+        print(data.iloc[0])
+        print(data.iloc[1])
+        print("*********************")
+        # s.phone_number = data.iloc[i][0]
+        # s.count = data.iloc[i][1]
+        print(s)
+        s.save()
+    return Response("request.data")

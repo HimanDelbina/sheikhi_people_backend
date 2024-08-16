@@ -10,6 +10,7 @@ urlpatterns = [
     path("get_sms_people", views.get_sms_people),
     path("get_recive_people", views.get_recive_people),
     path("get_filter_people", views.get_filter_people),
+    path("add_sms", views.add_sms),
     ###################################################
     path("create_user", views.create_user),
     path("login_user", views.login_user),
