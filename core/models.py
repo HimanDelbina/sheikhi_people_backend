@@ -10,6 +10,7 @@ class PeopleModel(models.Model):
     count = models.IntegerField(help_text="تعداد")
     is_sms = models.BooleanField(help_text="ایا اس ام اس ارسال شده", default=False)
     is_recive = models.BooleanField(help_text="ایا غذا دریافت کرده", default=False)
+    is_reject = models.BooleanField(help_text="ایا برای دریافت آمده", default=False)
     sms_date = models.DateField(
         auto_now=False, auto_now_add=False, null=True, blank=True
     )

@@ -68,10 +68,6 @@ def edit_sms_all_people(request):
     etid_data = request.data
     phone = etid_data["phone_number"]
     id = etid_data["id"]
-    # list_phone = ast.literal_eval(phone)
-    # list_id = ast.literal_eval(id)
-    print(phone)
-    print(id)
     message = etid_data["message"]
     sms_ir = SmsIr(
         "eakkbYygGNyC4BvGM5F1uIvvhQNeHpOyYfK7hNciF2dYn2C0eY4wWOtrddC6grL7",
@@ -87,10 +83,34 @@ def edit_sms_all_people(request):
 
 @api_view(["POST"])
 @permission_classes([AllowAny])
+def edit_sms_repeat(request):
+    etid_data = request.data
+    phone = etid_data["phone_number"]
+    message = etid_data["message"]
+    sms_ir = SmsIr(
+        "eakkbYygGNyC4BvGM5F1uIvvhQNeHpOyYfK7hNciF2dYn2C0eY4wWOtrddC6grL7",
+        "300089931197",
+    )
+    sms_ir.send_bulk_sms(phone, message, "300089931197")
+    return Response("sms is update succesfully....", status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
 def edit_recive_people(request):
     etid_data = request.data
     edit_data_find_in_database = PeopleModel.objects.get(id=etid_data["id"])
     edit_data_find_in_database.is_recive = etid_data["is_recive"]
+    edit_data_find_in_database.save()
+    return Response("form is update succesfully....", status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def edit_recive_people(request):
+    etid_data = request.data
+    edit_data_find_in_database = PeopleModel.objects.get(id=etid_data["id"])
+    edit_data_find_in_database.is_reis_rejectcive = etid_data["is_reject"]
     edit_data_find_in_database.save()
     return Response("form is update succesfully....", status=status.HTTP_200_OK)
 
@@ -115,12 +135,40 @@ def get_sms_people(request):
     data = PeopleModel.objects.filter(is_sms=True, is_recive=False)
     return Response(PeopleSerializers(data, many=True).data, status=status.HTTP_200_OK)
 
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def get_is_reject_people(request):
+    data = PeopleModel.objects.filter(is_sms=True, is_recive=False , is_reject=True)
+    return Response(PeopleSerializers(data, many=True).data, status=status.HTTP_200_OK)
+
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def get_recive_people(request):
     data = PeopleModel.objects.filter(is_sms=True, is_recive=True)
     return Response(PeopleSerializers(data, many=True).data, status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def get_sms_data(request):
+
+    conn = http.client.HTTPSConnection("api.sms.ir")
+    payload = ""
+    headers = {
+        "Accept": "text/plain",
+        "X-API-KEY": "eakkbYygGNyC4BvGM5F1uIvvhQNeHpOyYfK7hNciF2dYn2C0eY4wWOtrddC6grL7",
+    }
+    conn.request("GET", "/v1/send/live?pageNumber=1&pageSize=20", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    print(data.decode("utf-8"))
+    # sms_ir = SmsIr(
+    #     "eakkbYygGNyC4BvGM5F1uIvvhQNeHpOyYfK7hNciF2dYn2C0eY4wWOtrddC6grL7",
+    #     "300089931197",
+    # )
+    # data = sms_ir.report_pack(2)
+    return Response(data, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
@@ -191,18 +239,13 @@ def edit_user(request):
     edit_data_find_in_database.save()
     return Response("form is update succesfully....", status=status.HTTP_200_OK)
 
-import requests
-
-# Check the end of the url -->                                                                             HERE --v
 
 import pandas as pd
+
+
 @api_view(["GET"])
 def add_sms(request):
-    url = 'https://mega.nz/file/tGRH3JqB#N-2l65FrnokXFfqHbTQnDqfqREkn6izu8OKNlZCULd8'
-    headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/114.0'}
-
-    resp = requests.get(url, headers=headers)
-    data = pd.read_excel(resp)
+    data = pd.read_excel("C:/Users/it/Desktop/Django/shikhi/volumes/my_pro/people.xlsx")
     print(data)
     # data = pd.read_excel("f:/test.xlsx")
     print(len(data))

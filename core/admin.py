@@ -10,6 +10,7 @@ class PeopleAdmin(admin.ModelAdmin):
         "count",
         "is_sms",
         "is_recive",
+        "is_reject",
         "sms_date",
         "recive_date",
         "recive_time",
@@ -19,6 +20,7 @@ class PeopleAdmin(admin.ModelAdmin):
         "count",
         "is_sms",
         "is_recive",
+        "is_reject",
     ]
     search_fields = ["phone_number"]
 
